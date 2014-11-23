@@ -12,15 +12,15 @@ public class Java_ProjectServlet extends HttpServlet {
 		resp.getWriter().println(resultStr);
 		
 		int radius = 50;
-		String line1 = new String("<h1>Calculation 1: Area of circle with radius " +radius+ " cm is: " +(int)(Math.PI * Math.pow(radius, 2))+ " square cm.");
+		String line1 = new String("Calculation 1: Area of circle with radius " +radius+ " cm is: " +Math.PI * Math.pow(radius, 2)+ " square cm.");
 		
 		int angleB = 30, hypotenuse = 50;
 		double radians = Math.toRadians(angleB);
 		double sin = Math.sin(radians);
-		String line2 = new String("<h1>Calculation 2: Length of opposite where angle B is " +angleB+ " degrees and Hypotenuse length is " +hypotenuse+ " cm is: " +(int)(sin * hypotenuse)+ " cm.");
+		String line2 = new String("Calculation 2: Length of opposite where angle B is " +angleB+ " degrees and Hypotenuse length is " +hypotenuse+ " cm is: " +sin * hypotenuse+ " cm.");
 		
 		int base = 20, exp = 13;
-		String line3 = new String("<h1>Calculation 3: Power of 20 with exp of 13 is: " +(int) Math.pow(base, exp));
+		String line3 = new String("Calculation 3: Power of 20 with exp of 13 is: " + (long)Math.pow(base, exp));
 		resp.getWriter().println("<br>" +line1+ "<br>" + line2 + "<br>" + line3);
 		}
 }
