@@ -20,7 +20,7 @@ import com.mta.javacourse.michal.izraitel.model.Portfolio;
  *
  */
 
-public class PortfolioService extends HttpServlet {
+public class PortfolioService {
 	
 	/**
 	 * 3 new stocks are created and values are put in them. Afterwards, the stock is added

@@ -15,12 +15,12 @@ import com.mta.javacourse.michal.izraitel.Stock;
  * @since 04/12/2014
  */
 
-public class Portfolio extends HttpServlet {
+public class Portfolio {
 	
  	/**
  	 * The portfolio's title/name.
  	 */
-	private String title = " <h1> Portfolio Title: </h1>";
+	private String title;
 	
 	/**
 	 * The maximum size for the array that contains the stocks.
@@ -107,10 +107,11 @@ public class Portfolio extends HttpServlet {
 	 */
 	
 	public String getHtmlString () {
+		String htmlTitle = " <h1> Portfolio Title: </h1>";
 		String htmlCodeString = " ";
 		for (int i = 0; i < portfolioSize; i++)
 			htmlCodeString += stocks[i].getHtmlDescription() + "<br>"; 
-		return title + htmlCodeString;
+		return htmlTitle + htmlCodeString;
 		}
 		
 	public class StockStatus {
