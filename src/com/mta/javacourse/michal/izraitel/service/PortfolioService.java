@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mta.javacourse.michal.izraitel.Stock;
 import com.mta.javacourse.michal.izraitel.model.Portfolio;
+import com.mta.javacourse.michal.izraitel.model.Stock;
+import com.mta.javacourse.michal.izraitel.model.Portfolio.StockStatus;
 
 
 /**
@@ -21,6 +22,13 @@ import com.mta.javacourse.michal.izraitel.model.Portfolio;
  */
 
 public class PortfolioService {
+	
+	private final static int MAX_PORTFOLIO_SIZE = 5;
+	Portfolio myPortfolio;
+	
+	public PortfolioService() {
+		myPortfolio = new Portfolio ("NEW PORTFOLIO", new Stock[MAX_PORTFOLIO_SIZE], new StockStatus[MAX_PORTFOLIO_SIZE], 0);
+	}
 	
 	/**
 	 * 3 new stocks are created and values are put in them. Afterwards, the stock is added
@@ -34,38 +42,19 @@ public class PortfolioService {
 		c.set(2014, 10, 15, 00, 00);
 		Date mydate = c.getTime();
 		
-		Portfolio myPortfolio = new Portfolio();
-		
 		Stock stock1;
-		stock1 = new Stock();
-		stock1.setSymbol("PIH");
-		stock1.setAsk((float) 12.4);
-		stock1.setBid((float) 13.1);
-		stock1.setDate(mydate);
-			
+		stock1 = new Stock("PIH", (float) 12.4, (float) 13.1, mydate);
 		myPortfolio.addStock(stock1);
 			
 		Stock stock2;
-		stock2 = new Stock();
-		stock2.setSymbol("AAL");
-		stock2.setAsk((float) 5.5);
-		stock2.setBid((float) 5.78);
-		stock2.setDate(mydate);	
-			
+		stock2 = new Stock("AAL", (float) 5.5, (float) 5.78, mydate);
 		myPortfolio.addStock(stock2);
 		
 		Stock stock3;
-		stock3 = new Stock();
-		stock3.setSymbol("CAAS");
-		stock3.setAsk((float) 31.5);
-		stock3.setBid((float) 31.2);
-		stock3.setDate(mydate);
-			
+		stock3 = new Stock("CAAS", (float) 31.5, (float) 31.2, mydate);
 		myPortfolio.addStock(stock3);
 		
 		return myPortfolio;
 		
 	}
 }
-
-

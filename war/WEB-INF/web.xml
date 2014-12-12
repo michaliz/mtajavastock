@@ -4,39 +4,13 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<servlet>
-		<servlet-name>Java_Project</servlet-name>
-		<servlet-class>com.mta.javacourse.michal.izraitel.Java_ProjectServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Java_Project</servlet-name>
-		<url-pattern>/java_project</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>My_New_Servlet</servlet-name>
-		<servlet-class>com.mta.javacourse.michal.izraitel.NewHelloServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>My_New_Servlet</servlet-name>
-		<url-pattern>/my_new_servlet</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>StockDetailsServlet</servlet-name>
-		<servlet-class>com.mta.javacourse.michal.izraitel.StockDetailsServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>StockDetailsServlet</servlet-name>
-		<url-pattern>/stockdetails</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>PortfolioServlet</servlet-name>
+		<servlet-name>Portfolio</servlet-name>
 		<servlet-class>com.mta.javacourse.michal.izraitel.servlet.PortfolioServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>PortfolioServlet</servlet-name>
+		<servlet-name>Portfolio</servlet-name>
 		<url-pattern>/portfolio</url-pattern>
 	</servlet-mapping>
 	
