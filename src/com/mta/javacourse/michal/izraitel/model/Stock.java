@@ -67,7 +67,7 @@ public class Stock {
 	 */
 	
 	public Stock (Stock stock){
-		this(stock.getSymbol(), stock.getAsk(), stock.getBid(), stock.getDate());
+		this(stock.getSymbol(), stock.getAsk(), stock.getBid(), new Date(stock.getDate().getTime()));
 	}
 	
 	
@@ -77,7 +77,7 @@ public class Stock {
 	 */
 	
 	public String getHtmlDescription() {
-		String stockHtmlDetailsString = new String (" <b>  Stock symbol</b>:  " + getSymbol() + " <b>  Bid</b>:  " + getBid() + " <b>  Ask</b>:  "  + getAsk() + " <b>  Date</b>:  " + getDate());
+		String stockHtmlDetailsString = new String (" <b>  Stock symbol:</b>  " + getSymbol() + " <b>  Bid:</b>  " + getBid() + " <b>  Ask:</b>  "  + getAsk() + " <b>  Date:</b>  " + getDate() + " <b>  Quantity of these stocks:</b>  ");
 		return stockHtmlDetailsString;
 		}
 	

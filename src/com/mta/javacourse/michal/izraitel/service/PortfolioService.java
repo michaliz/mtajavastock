@@ -23,11 +23,10 @@ import com.mta.javacourse.michal.izraitel.model.Portfolio.StockStatus;
 
 public class PortfolioService {
 	
-	private final static int MAX_PORTFOLIO_SIZE = 5;
 	Portfolio myPortfolio;
 	
 	public PortfolioService() {
-		myPortfolio = new Portfolio ("NEW PORTFOLIO", new Stock[MAX_PORTFOLIO_SIZE], new StockStatus[MAX_PORTFOLIO_SIZE], 0);
+		myPortfolio = new Portfolio (" ", new Stock[Portfolio.getMaxPortfolioSize()], new StockStatus[Portfolio.getMaxPortfolioSize()], 0);
 	}
 	
 	/**
@@ -39,20 +38,29 @@ public class PortfolioService {
 	public Portfolio getPortfolio() {
 		
 		Calendar c = Calendar.getInstance();
-		c.set(2014, 10, 15, 00, 00);
+		c.set(2014, 11, 15, 00, 00);
 		Date mydate = c.getTime();
 		
 		Stock stock1;
-		stock1 = new Stock("PIH", (float) 12.4, (float) 13.1, mydate);
+		stock1 = new Stock("PIH", (float) 10, (float) 8.5, mydate);
 		myPortfolio.addStock(stock1);
 			
 		Stock stock2;
-		stock2 = new Stock("AAL", (float) 5.5, (float) 5.78, mydate);
+		stock2 = new Stock("AAL", (float) 30, (float) 25.5, mydate);
 		myPortfolio.addStock(stock2);
 		
 		Stock stock3;
-		stock3 = new Stock("CAAS", (float) 31.5, (float) 31.2, mydate);
+		stock3 = new Stock("CAAS", (float) 20, (float) 15.5, mydate);
 		myPortfolio.addStock(stock3);
+		
+		myPortfolio.setTitle("Exercise 07 Portfolio"); 
+		myPortfolio.setBalance(10000);
+		myPortfolio.buyStock("PIH", 20);
+		myPortfolio.buyStock("AAL", 30);
+		myPortfolio.buyStock("CAAS", 40);
+		
+		myPortfolio.sellStock("AAL", -1);
+		myPortfolio.removeStock("CAAS");
 		
 		return myPortfolio;
 		
