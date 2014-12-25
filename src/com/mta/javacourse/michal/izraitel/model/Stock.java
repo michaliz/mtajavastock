@@ -47,7 +47,7 @@ public class Stock {
 	}
 	
 	/**
-	 * A method that creates a new Stock and inputs values in it's fields.
+	 * A constructor that creates a new Stock and inputs values in it's fields.
 	 * @param symbolS - the stock's name/symbol.
 	 * @param askS - the stock's asking price.
 	 * @param bidS - the stock's bidding price.

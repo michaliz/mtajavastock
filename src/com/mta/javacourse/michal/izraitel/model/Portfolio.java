@@ -11,8 +11,8 @@ import java.util.Date;
 
 public class Portfolio {
 
-	private String title;
 	private final static int MAX_PORTFOLIO_SIZE = 5;
+	private String title;
 	private Stock[]stocks;
 	private StockStatus[]stocksStatus;
 	private int portfolioSize = 0;
@@ -59,9 +59,12 @@ public class Portfolio {
 		this.stocks = stocks;
 	}
 	
-
+	public Stock[] getStocks () {
+		return stocks;
+	}
+	
 	/**
-	 * A method that creates a new Portfolio and inputs values in it's fields.
+	 * A constructor that creates a new Portfolio and inputs values in it's fields.
 	 * @param titleS - the portfolio's name/title.
 	 * @param stocksS - an array of stocks.
 	 * @param stockStatusS - an array of statuses for each stock.
@@ -94,7 +97,7 @@ public class Portfolio {
 	
 	
 	/**
-	 * Receives a stock and adds it to the array containing the stocks. After this action, 
+	 * A method that receives a stock and adds it to the array containing the stocks. After this action, 
 	 * the portfolio size is updated so that the next added stock will be in the next empty place.
 	 * Same with StockStock array. 
 	 * @param newStock - The stock to be added to the array of stocks.
@@ -123,15 +126,6 @@ public class Portfolio {
 	}
 
 	/**
-	 * Gets the array of stocks to use in other classes.
-	 * @return the array of stocks.
-	 */
-	
-	public Stock[] getStocks () {
-		return stocks;
-	}
-	
-	/**
 	 * A method that concats all the html descriptions of the stocks in the array.
 	 * The loop goes over the array, according to it's size, and adds the description in a string.
 	 * @return the portfolio's title and adds to it the html code with the stock's details
@@ -144,6 +138,134 @@ public class Portfolio {
 			htmlCodeString += stocks[i].getHtmlDescription() + stocksStatus[i].getStockQuantity() + "<br>";
 		htmlCodeString += ("<br><b> The total portfolio value is: </b> " + this.getTotalValue()+ " $.<br><b> The total stock value is: </b> " + this.getStocksValue()+ " $.<br><b> The current balance is: </b> " + this.getBalance() + "$.<br>");
 		return htmlCodeString;
+	}
+	
+	/**
+	 * A method that updates the current balance in the portfolio. 
+	 * @param amount - the sum that is added/subtracted to the balance.
+	 */
+	
+	public void updateBalance (float amount) {
+		balance += amount;
+	}
+	
+	/**
+	 * A method that deletes a stock from the portfolio (both from the array of stocks and the
+	 * array of status). It checks if the stock exists in the portfolio and uses sellStock 
+	 * method to sell this stock (if possible).
+	 * @param symbol - the symbol of the stock the user wants to remove.
+	 * @return a true/false answer if the stock was successfully removed or not.
+	 */
+	
+	public boolean removeStock (String symbol) {
+		for (int i = 0; i < portfolioSize; i++) {
+			if (symbol == stocks[i].getSymbol()) {
+				sellStock(symbol, -1);
+				stocks[i] = stocks[portfolioSize - 1];
+				stocksStatus[i] = stocksStatus[portfolioSize - 1];
+				portfolioSize--;
+				System.out.println("The stock " +symbol+ " was removed from your portfolio.");
+				return true;
+			}
+		}
+		
+		System.out.println("The stock " +symbol+ " doesn't exist in your portfolio so it cannot be removed.");
+		return false;
+	}
+	
+	/**
+	 * This method sells stocks and updates stock's quantity and the current balance. It checks
+	 * if the amount of stocks the user wishes to sell even exists in his portfolio. 
+	 * @param symbol - the symbol of the stock you wish to sell.
+	 * @param quantity - the quantity of stocks with this symbol you wish to sell.
+	 * @return an answer if it is possible to sell the stock (if it exists in the portfolio or 
+	 * if the quantity is possible to sell).
+	 */
+	
+	public boolean sellStock (String symbol, int quantity) {
+		for (int i = 0; i < portfolioSize; i++) {
+				if (symbol == stocks[i].getSymbol()) {
+					if(quantity == -1) {
+						updateBalance (stocksStatus[i].getCurrentBid() * stocksStatus[i].getStockQuantity());
+						stocksStatus[i].setStockQuantity(0);
+						System.out.println("All " +symbol+ " stocks you own were sold from your portfolio. Your current balance is: " +balance );
+					}
+					else {
+						if (stocksStatus[i].getStockQuantity() - quantity > 0) {
+							stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() - quantity);
+							updateBalance (stocksStatus[i].getCurrentBid() * quantity);
+							System.out.println( quantity + symbol + " stocks were sold from your portfolio. Your current balance is: " +balance );
+					}
+						else {
+							System.out.println("The quantity you want to sell is higher than the amount of stocks you own.");
+							return false;
+						}
+					}
+					return true;
+				}
+		}
+		System.out.println("The stock " +symbol+ " doesn't exist in your portfolio so it cannot be sold.");
+		return false;
+	}
+	
+	/**
+	 * A method that buys a stock and updates stock's quantity and balance. It checks if the 
+	 * balance allows the purchase of the wanted quantity to buy or if it even exists in the portfolio.
+	 * @param symbol -  the symbol of the stock you wish to buy.
+	 * @param quantity - the quantity of stocks with this symbol you wish to buy.
+	 * @return an answer if it is possible to buy the stock (if it exists in the portfolio or 
+	 * if the quantity is possible to buy with the current balance).
+	 */
+	
+	public boolean buyStock (String symbol, int quantity) {
+		for (int i = 0; i < portfolioSize; i++) {
+			if (symbol == stocks[i].getSymbol()) {
+				if(quantity == -1) {
+					int quan = (int)(balance / stocksStatus[i].getCurrentAsk());
+					stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() + quan);
+					updateBalance (-(quan * stocksStatus[i].getCurrentAsk()));
+					System.out.println( quan+ " stock/s of symbol " +symbol+ " were bought. Your current balance is: " +balance );
+				}
+				else {
+					if ((stocksStatus[i].currentAsk * quantity) > balance) {
+						System.out.println("Your balance is NOT high enough to complete the purchase.");
+						return false;
+					}
+					else {
+							stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() + quantity);
+							updateBalance (-(quantity * stocksStatus[i].getCurrentAsk()));
+							System.out.println( quantity+ " stock/s of symbol " +symbol+ " were bought. Your current balance is: " +balance );
+					}
+				}
+				return true;
+			}
+		}
+		System.out.println("The stock " +symbol+ " you wish to buy doesn't exist in your portfolio.");
+		return false;
+	}
+	
+	/**
+	 * A method that counts the value of all the stocks in the portfolio. It multiplies the bid
+	 * of the stock by the quantity of stocks of the same kind.
+	 * @return - the value of the portfolio (bid*quantity).
+	 */
+	
+	public float getStocksValue() {
+		float value = 0;
+		for (int i = 0; i < portfolioSize; i++) {
+			value += (stocksStatus[i].getCurrentBid() * stocksStatus[i].getStockQuantity());
+		}
+		return value;
+	}
+	
+	/**
+	 * A method that counts the total value of the portfolio. The value of the stocks I own
+	 * and the amount of my balance.
+	 * @return The total value of all the portfolio.
+	 */
+	
+	public float getTotalValue() {
+		return (getStocksValue() + getBalance());
 	}
 	
 	/**
@@ -220,7 +342,7 @@ public class Portfolio {
 
 
 		/**
-		 * A method that creates a new array that contains the current status of each stock
+		 * A constructor that creates a new array that contains the current status of each stock
 		 * in the portfolio.
 		 * @param symbolStatus - the stock's name/symbol.
 		 * @param cBidStatus - the stock's bidding price.
@@ -240,7 +362,6 @@ public class Portfolio {
 			stockQuantity = stockQuaStatus;
 		}
 	
-	
 		/**
 		 * A copy constructor that makes a new, copied array of StockStatus.
 		 * @param stocksStatus - an array that contains the current status of each stock
@@ -258,134 +379,6 @@ public class Portfolio {
 				this.stockQuantity = stocksStatus.stockQuantity;
 			}
 		}
-	}
-		
-	/**
-	 * A method that updates the current balance in the portfolio. 
-	 * @param amount - the sum that is added/subtracted to the balance.
-	 */
-	
-	public void updateBalance (float amount) {
-		balance += amount;
-	}
-	
-	/**
-	 * A method that deletes a stock from the portfolio (both from the array of stocks and the
-	 * array of status). It checks if the stock exists in the portfolio and uses sellStock 
-	 * method to sell this stock (if possible).
-	 * @param symbol - the symbol of the stock the user wants to remove.
-	 * @return a true/false answer if the stock was successfully removed or not.
-	 */
-	
-	public boolean removeStock (String symbol) {
-		for (int i = 0; i < portfolioSize; i++) {
-			if (symbol == stocks[i].getSymbol()) {
-				sellStock(symbol, -1);
-				stocks[i] = stocks[portfolioSize - 1];
-				stocksStatus[i] = stocksStatus[portfolioSize - 1];
-				portfolioSize--;
-				System.out.println("The stock " +symbol+ " was removed from your portfolio.");
-				return true;
-			}
-		}
-		
-		System.out.println("The stock " +symbol+ " doesn't exist in your portfolio so it cannot be removed.");
-		return false;
-	}
-	
-	/**
-	 * This method sells stocks and updates stock's quantity and the current balance. It checks
-	 * if the amount of stocks the user wishes to sell even exists in his portfolio. 
-	 * @param symbol - the symbol of the stock you wish to sell.
-	 * @param quantity - the quantity of stocks with this symbol you wish to sell.
-	 * @return an answer if it is possible to sell the stock (if it exists in the portfolio or 
-	 * if the quantity is possible to sell).
-	 */
-	
-	public boolean sellStock (String symbol, int quantity) {
-		for (int i = 0; i < portfolioSize; i++) {
-				if (symbol == stocks[i].getSymbol()) {
-					if(quantity == -1) {
-						updateBalance (stocks[i].getBid() * stocksStatus[i].getStockQuantity());
-						stocksStatus[i].setStockQuantity(0);
-						System.out.println("All " +symbol+ " stocks you own were sold from your portfolio. Your current balance is: " +balance );
-					}
-					else {
-						if (stocksStatus[i].getStockQuantity() - quantity > 0) {
-							stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() - quantity);
-							updateBalance (stocks[i].getBid() * quantity);
-							System.out.println( quantity + symbol + " stocks were sold from your portfolio. Your current balance is: " +balance );
-					}
-						else {
-							System.out.println("The quantity you want to sell is higher than the amount of stocks you own.");
-							return false;
-						}
-					}
-					return true;
-				}
-		}
-		System.out.println("The stock " +symbol+ " doesn't exist in your portfolio so it cannot be sold.");
-		return false;
-	}
-	
-	/**
-	 * A method that buys a stock and updates stock's quantity and balance. It checks if the 
-	 * balance allows the purchase of the wanted quantity to buy or if it even exists in the portfolio.
-	 * @param symbol -  the symbol of the stock you wish to buy.
-	 * @param quantity - the quantity of stocks with this symbol you wish to buy.
-	 * @return an answer if it is possible to buy the stock (if it exists in the portfolio or 
-	 * if the quantity is possible to buy with the current balance).
-	 */
-	
-	public boolean buyStock (String symbol, int quantity) {
-		for (int i = 0; i < portfolioSize; i++) {
-			if (symbol == stocks[i].getSymbol()) {
-				if(quantity == -1) {
-					int quan = (int)(balance / stocksStatus[i].getCurrentAsk());
-					stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() + quan);
-					updateBalance (-(quan * stocksStatus[i].getCurrentAsk()));
-					System.out.println( quan+ " stock/s of symbol " +symbol+ " were bought. Your current balance is: " +balance );
-				}
-				else {
-					if ((stocksStatus[i].currentAsk * quantity) > balance) {
-						System.out.println("Your balance is NOT high enough to complete the purchase.");
-						return false;
-					}
-					else {
-							stocksStatus[i].setStockQuantity(stocksStatus[i].getStockQuantity() + quantity);
-							updateBalance (-(quantity * stocksStatus[i].getCurrentAsk()));
-							System.out.println( quantity+ " stock/s of symbol " +symbol+ " were bought. Your current balance is: " +balance );
-					}
-				}
-				return true;
-			}
-		}
-		System.out.println("The stock " +symbol+ " you wish to buy doesn't exist in your portfolio.");
-		return false;
-	}
-	
-	/**
-	 * A method that counts the value of all the stocks in the portfolio. It multiplies the bid
-	 * of the stock by the quantity of stocks of the same kind.
-	 * @return - the value of the portfolio (bid*quantity).
-	 */
-	
-	public float getStocksValue() {
-		float value = 0;
-		for (int i = 0; i < portfolioSize; i++) {
-			value += (stocksStatus[i].getCurrentBid() * stocksStatus[i].getStockQuantity());
-		}
-		return value;
-	}
-	
-	/**
-	 * A method that counts the total value of the portfolio. The value of the stocks I own
-	 * and the amount of my balance.
-	 * @return The total value of all the portfolio.
-	 */
-	
-	public float getTotalValue() {
-		return (getStocksValue() + getBalance());
 	}
 }
 	
