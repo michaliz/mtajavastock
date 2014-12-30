@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mta.javacourse.michal.izraitel.model.Portfolio;
 import com.mta.javacourse.michal.izraitel.model.Stock;
-import com.mta.javacourse.michal.izraitel.model.Portfolio.StockStatus;
+import com.mta.javacourse.michal.izraitel.model.StockStatus;
 
 
 /**
