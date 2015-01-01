@@ -45,9 +45,13 @@ public class StockStatus extends Stock {
 		this.stockQuantity = stockQuan;
 	}
 	
+	/**
+	 * A copy constructor.
+	 * @param stocksStatus - an array that contains the status for each stock.
+	 */
 	
 	public StockStatus (StockStatus stocksStatus) {
-		super (stocksStatus.getSymbol(), stocksStatus.getAsk(), stocksStatus.getBid(), new Date(stocksStatus.getDate().getTime()));
+		super (stocksStatus);
 		this.recommendation = stocksStatus.getRecommendation();
 		this.stockQuantity = stocksStatus.getStockQuantity();
 	}
