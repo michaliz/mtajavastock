@@ -6,8 +6,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mta.javacourse.michal.izraitel.exception.BalanceException;
+import com.mta.javacourse.michal.izraitel.exception.PortfolioFullException;
+import com.mta.javacourse.michal.izraitel.exception.QuantityException;
+import com.mta.javacourse.michal.izraitel.exception.StockAlreadyExistsException;
+import com.mta.javacourse.michal.izraitel.exception.StockNotExistException;
 import com.mta.javacourse.michal.izraitel.model.Portfolio;
-import com.mta.javacourse.michal.izraitel.model.Stock;
 import com.mta.javacourse.michal.izraitel.service.PortfolioService;
 
 /**
@@ -18,13 +22,28 @@ import com.mta.javacourse.michal.izraitel.service.PortfolioService;
  */
 
 public class PortfolioServlet extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
 		PortfolioService portfolioService = new PortfolioService();
-		Portfolio portfolio = portfolioService.getPortfolio();
+		Portfolio portfolio;
+		try {
+			portfolio = portfolioService.getPortfolio();
+			resp.getWriter().println(portfolio.getHtmlString());
+		} catch (PortfolioFullException e) {
+			resp.getWriter().println(e.getMessage());
+		} catch (StockAlreadyExistsException e) {
+			resp.getWriter().println(e.getMessage());
+		} catch (StockNotExistException e) {
+			resp.getWriter().println(e.getMessage());
+		} catch (BalanceException e) {
+			resp.getWriter().println(e.getMessage());
+		} catch (QuantityException e) {
+			resp.getWriter().println(e.getMessage());
+		}
 						
 		resp.setContentType("text/html");
-		
-		resp.getWriter().println (portfolio.getHtmlString());
 	}
 }
