@@ -1,49 +1,38 @@
 package com.mta.javacourse.michal.izraitel.servlet;
 
-import java.io.IOException;
+import com.mta.javacourse.michal.izraitel.dto.PortfolioDto;
+import com.mta.javacourse.michal.izraitel.dto.PortfolioTotalStatus;
+import com.mta.javacourse.michal.izraitel.model.StockStatus;
 
-import javax.servlet.http.HttpServlet;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mta.javacourse.michal.izraitel.exception.BalanceException;
-import com.mta.javacourse.michal.izraitel.exception.PortfolioFullException;
-import com.mta.javacourse.michal.izraitel.exception.QuantityException;
-import com.mta.javacourse.michal.izraitel.exception.StockAlreadyExistsException;
-import com.mta.javacourse.michal.izraitel.exception.StockNotExistException;
-import com.mta.javacourse.michal.izraitel.model.Portfolio;
-import com.mta.javacourse.michal.izraitel.service.PortfolioService;
+public class PortfolioServlet extends AbstractAlgoServlet {
 
-/**
- * An instance of this class sends data to front end, the html side.
- * @author Michal Izraitel
- * @since 04/12/2014
- *
- */
-
-public class PortfolioServlet extends HttpServlet {
-	
 	private static final long serialVersionUID = 1L;
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		PortfolioService portfolioService = new PortfolioService();
-		Portfolio portfolio;
-		try {
-			portfolio = portfolioService.getPortfolio();
-			resp.getWriter().println(portfolio.getHtmlString());
-		} catch (PortfolioFullException e) {
-			resp.getWriter().println(e.getMessage());
-		} catch (StockAlreadyExistsException e) {
-			resp.getWriter().println(e.getMessage());
-		} catch (StockNotExistException e) {
-			resp.getWriter().println(e.getMessage());
-		} catch (BalanceException e) {
-			resp.getWriter().println(e.getMessage());
-		} catch (QuantityException e) {
-			resp.getWriter().println(e.getMessage());
+		resp.setContentType("application/json");
+		
+		PortfolioTotalStatus[] totalStatus = portfolioService.getPortfolioTotalStatus();
+		StockStatus[] stockStatusArray = portfolioService.getPortfolio().getStocks();
+		List<StockStatus> stockStatusList = new ArrayList<>();
+		for (StockStatus ss : stockStatusArray) {
+			if(ss != null)
+				stockStatusList.add(ss);
 		}
-						
-		resp.setContentType("text/html");
+		
+		PortfolioDto pDto = new PortfolioDto();
+		pDto.setTitle(portfolioService.getPortfolio().getTitle());
+		pDto.setTotalStatus(totalStatus);
+		pDto.setStockTable(stockStatusList);
+		resp.getWriter().print(withNullObjects().toJson(pDto));
 	}
 }

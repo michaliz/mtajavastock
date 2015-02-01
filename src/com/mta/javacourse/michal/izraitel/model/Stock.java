@@ -14,6 +14,37 @@ public class Stock {
 	protected float ask, bid;
 	protected java.util.Date date;
 	
+	
+	/**
+	 * Constructors that create new Stock and inputs values in it's fields.
+	 * @param symbolS - the stock's name/symbol.
+	 * @param askS - the stock's asking price.
+	 * @param bidS - the stock's bidding price.
+	 * @param dateS - the stock's date.
+	 */
+	
+	public Stock () {
+		this("",0,0,new Date(0));
+	}
+	
+	public Stock (String symbolS, float askS, float bidS, Date dateS) {
+		symbol = symbolS;
+		ask = askS;
+		bid = bidS;
+		date = dateS;
+	}
+	
+	
+	/**
+	 * A copy constructor that makes a new, copied Stock.
+	 * @param stock - the stock we wish to copy.
+	 */
+	
+	public Stock (Stock stock){
+		this(stock.getSymbol(), stock.getAsk(), stock.getBid(), new Date(stock.getDate().getTime()));
+	}
+	
+	
 	public String getSymbol() {
 		return symbol;
 	}
@@ -43,31 +74,18 @@ public class Stock {
 	}
 	
 	public void setDate(Date date) {
-		this.date = date;
+		this.date = new Date (date.getTime());
 	}
 	
-	/**
-	 * A constructor that creates a new Stock and inputs values in it's fields.
-	 * @param symbolS - the stock's name/symbol.
-	 * @param askS - the stock's asking price.
-	 * @param bidS - the stock's bidding price.
-	 * @param dateS - the stock's date.
-	 */
-	
-	public Stock (String symbolS, float askS, float bidS, Date dateS) {
-		symbol = symbolS;
-		ask = askS;
-		bid = bidS;
-		date = dateS;
+	public void setStock(String symbol, float ask, float bid, Date d) {
+		this.symbol = symbol;
+		this.ask = ask;
+		this.bid = bid;
+		this.date = new Date (d.getTime());
 	}
 	
-	/**
-	 * A copy constructor that makes a new, copied Stock.
-	 * @param stock - the stock we wish to copy.
-	 */
-	
-	public Stock (Stock stock){
-		this(stock.getSymbol(), stock.getAsk(), stock.getBid(), new Date(stock.getDate().getTime()));
+	public boolean sameString (String symbol){
+		return (this.symbol.equals(symbol));
 	}
 	
 	
